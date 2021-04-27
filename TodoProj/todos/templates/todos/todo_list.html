@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css ">
+    
+
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row mt-5 ">
+            <div class="col-md-8 offset-md-2">
+
+                <div class="card">
+                    <div class="card header shadow-sm bg-white">
+                        
+                        <h1 class="display-5 text-info">
+                            <!-- <i class="fas fa-check-double"> </i>-->
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-double-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+                              </svg>
+                         Todos</h1>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- this wil display all the todo list and li will be todo_list item -->
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                            <form action="{% url 'insert_todo_item' %}" method="post" autocomplete="off">
+                                <!--csfr is used by the server to check if form submitted is from a trusted source-->
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="content">
+                                    <!-- this is to input a group and a text color -->
+                                    <div class="input-group-append text-info">
+                                        <span class="input-group-text bg-blue py-0">
+                                            <button type="submit" class="btn btn-sm test-info">
+                                                <i class="fa fa-plus-circle fa-lg"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                            </form>
+                            {% for todo in todo_list %}
+                                <li class="list-group-item">{{todo.content}}</li>
+                                <!-- To add delete key... float-right is to alight right & d-inline is 4 inline -->
+                                    <form action="{% url 'delete_todo_item' todo.id %}" method="post" class="float-right d-inline">
+                                        {% csrf_token %} <!--this is to validate if the code is from correct source-->
+                                        <button type="submit" class="btn">
+                                            <!-- to create a delete icon
+                                            <i class="far fa-trash-alt fa-lg text-danger float-danger"></i>-->
+                                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                              </svg>
+                                        </button>
+                                    </form>
+                                <!-- if the todo_list is empty -->
+                                {% empty %}
+                                <li class="list-group-item">
+                                    <span class="font-italic"> No todo item to do </span>
+                                </li>
+                                {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" 
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" 
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+    crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" 
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" 
+    crossorigin="anonymous"></script>
+</body>
+</html>
